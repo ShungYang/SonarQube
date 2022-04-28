@@ -37,3 +37,9 @@ sudo docker-compose up -d
 ```
 
 接著訪問 <http://localhost:9000> , 使用 admin / admin 作登入後再修改密碼.
+
+## Upgrade Guide
+
+遇到要將 SonarQube 進行升級的話, 可以在 docker-compose.yaml 的 sonarqube.image 指定升級的 tag, `docker-compose up -d` 後前往 SonarQube webpage 會看到需要進一步 migration database 的提示, 然後使用 admin 權限登入以下網頁跟著升級指示操作.
+
+* [http://yourSonarQubeServerURL/setup](http://yourSonarQubeServerURL/setup)
