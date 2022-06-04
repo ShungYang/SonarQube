@@ -20,3 +20,5 @@ SonarLint 能檢查的程式語言也很豐富, 我使用的架構是在 IDE 安
   * SonarLint client 需要開發環境有安裝 jre1.8+ 的版本
   * 支援 PLSQL : 需要 SonarQube Developer Edition
   * 支援 TS /JS / Vue.js : Client 環境需要安裝 node.js 16+ 的版本
+
+__Enjoy!__
