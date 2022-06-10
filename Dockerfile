@@ -21,11 +21,11 @@ ARG SONAR_TOKEN
 ARG CI_COMMIT_SHORT_SHA
 
 WORKDIR /src
-COPY ["WebApi.Module.Flow/WebApi.Module.Flow.csproj", "WebApi.Module.Flow/"]
-COPY ["WebApi.Module.Flow/nuget.config", "WebApi.Module.Flow/"]
-RUN dotnet restore "WebApi.Module.Flow/WebApi.Module.Flow.csproj"
+COPY ["WebApi.Service.Discovery/WebApi.Service.Discovery.csproj", "WebApi.Service.Discovery/"]
+COPY ["WebApi.Service.Discovery/nuget.config", "WebApi.Service.Discovery/"]
+RUN dotnet restore "WebApi.Service.Discovery/WebApi.Service.Discovery.csproj"
 COPY . .
-WORKDIR "/src/WebApi.Module.Flow"
+WORKDIR "/src/WebApi.Service.Discovery"
 RUN apt-get update && apt-get install --yes openjdk-11-jre
 RUN dotnet tool install --global dotnet-sonarscanner
 ENV PATH="$PATH:/root/.dotnet/tools"
@@ -35,16 +35,17 @@ RUN dotnet sonarscanner begin \
     /d:sonar.login="$SONAR_TOKEN" \
     /d:sonar.host.url="$SONAR_HOST_URL" \
     /d:sonar.qualitygate.wait="true"
-RUN dotnet build "WebApi.Module.Flow.csproj" -c Release -o /app/build
+RUN dotnet build "WebApi.Service.Discovery.csproj" -c Release -o /app/build
 RUN dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
 
 FROM build AS publish
-RUN dotnet publish "WebApi.Module.Flow.csproj" -c Release -o /app/publish
+RUN dotnet publish "WebApi.Service.Discovery.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENV ASPNETCORE_ENVIRONMENT dev
-ENV ASPNETCORE_PATHBASE /flowmodule
+ENV ASPNETCORE_PATHBASE /Discovery
 ENV ASPNETCORE_VERSION 1.1.0
-ENTRYPOINT ["dotnet", "WebApi.Module.Flow.dll"]
+ENTRYPOINT ["dotnet", "WebApi.Service.Discovery.dll"]
+
